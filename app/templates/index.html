@@ -35,6 +35,12 @@
 {{super()}}
 <style type="text/css">
   html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+
+  #action-button {
+    position: fixed;
+  bottom:2%; right:2%;
+
+  }
 </style>
 
 
@@ -106,5 +112,12 @@
       </div>
     </div>
   </div>
+</div>
+
+<div id="action-button" >
+
+  <button style="display:none" id="add-marker" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add new rest room.</button>
+  <button style="display:none" id="save-marker" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Save</button>
+  <button style="display:none" id="cancel-marker" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Cancel</button>
 </div>
 {% endblock %}
