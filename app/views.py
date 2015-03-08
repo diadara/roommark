@@ -60,25 +60,18 @@ def create_user_locations(id):
 
 
 @app.route('/api/location', methods = ['GET'])
-@auth.login_required
-def create_user_locations(id):
-    lattitude = request.json.get('lattitude')
-    longitude = request.json.get('longitude')
-    user_id = g.user.id
-    location = Location(plat=lattitude,
-                        plong=longitude,
-                        timestamp= datetime.datetime.utcnow(),
-                        user_id=g.user.id)
-    db.session.add(location)
-    db.session.commit()
-    return jsonify({'lattitude': lattitude, 'longitude': longitude }), 201
+def get_locations():
+    locations = Location.query.all();
+    ls = [{"lattitude": l.plat, "longitude": l.plong, "id": l.id} for l in locations]
+    return jsonify({'locations': ls})
+
 
 
 
 @app.route('/api/users/<int:id>/location', methods = ['GET'])
 def get_user_locations(id):
     locations = Location.query.filter_by(user_id=id)
-    ls = [{"lattitude": l.plat, "longitude": l.plong} for l in locations]
+    ls = [{"lattitude": l.plat, "longitude": l.plong, "id": l.id} for l in locations]
     return jsonify({'locations': ls})
 
 
