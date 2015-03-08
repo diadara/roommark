@@ -1,7 +1,7 @@
 from flask import render_template, abort, jsonify, request, url_for, g
 from app.model import User, Location
 from app import app, db, auth
-
+import datetime
 
 @auth.verify_password
 def verify_password(username_or_token, password):
@@ -44,9 +44,27 @@ def get_user(id):
         abort(400)
     return jsonify({'username': user.username})
 
-@app.route('/api/users/<int:id>/location')
+@app.route('/api/users/<int:id>/location', methods = ['POST'])
+@auth.login_required
+def create_user_locations(id):
+    lattitude = request.json.get('lattitude')
+    longitude = request.json.get('longitude')
+    user_id = g.user.id
+    location = Location(plat=lattitude,
+                        plong=longitude,
+                        timestamp= datetime.datetime.utcnow(),
+                        user_id=g.user.id)
+    db.session.add(location)
+    db.session.commit()
+    return jsonify({'lattitude': lattitude, 'longitude': longitude }), 201
+
+
+@app.route('/api/users/<int:id>/location', methods = ['GET'])
 def get_user_locations(id):
-    pass
+    locations = Location.query.filter_by(user_id=id)
+    ls = [{"lattitude": l.plat, "longitude": l.plong} for l in locations]
+    return jsonify({'locations': ls})
+
 
 
 @app.route('/api/token')
