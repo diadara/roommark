@@ -10,7 +10,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(120))
 
     def __repr__(self):
-        return '<User %r>' % (self.nickname)
+        return '<User %r>' % (self.username)
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)

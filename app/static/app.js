@@ -63,3 +63,76 @@ function handleNoGeolocation(errorFlag) {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
+$("#btn-login").click(function(){
+    var userName = $(".form-login #userName").val()
+    var pass = $(".form-login #userPassword").val()
+    $.ajax({
+        url: "api/token",
+        dataType: "json",
+        success: function(data){
+            console.log(data);
+            $("#myModal").modal("hide");
+            $("#modal-alert").hide();
+            update_navbar(userName);
+        },
+        error: function(){
+            $("#modal-alert").html("Error occured, check username and password again.").addClass("alert alert-warning").show();
+        },
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader ("Authorization", "Basic "+btoa(userName+":"+pass));
+        },
+
+    })
+
+
+
+})
+
+$("#btn-signup").click(function(){
+    var userName = $(".form-signup #userName").val();
+    var pass = $(".form-signup #userPassword").val();
+    var data = {"username": userName,
+                "password": pass};
+    console.log(data);
+    console.log(userName);
+    $.ajax({
+        url: "api/users",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+
+        success: function(data){
+            console.log(data);
+            $("#myModal").modal("hide");
+            $("#modal-alert").hide();
+            update_navbar(userName);
+        },
+        error: function(){
+            $("#modal-alert").html("Username already exists.").addClass("alert alert-warning").show();
+        },
+
+
+    });
+
+
+
+});
+
+
+function update_navbar(username){
+    $("#lors").hide();
+    $("#lout").show();
+    $("#lusername").html("<a>"+username+"</a>").show();
+}
+
+
+function logout(){
+    $("#lors").show();
+    $("#lout").hide();
+    $("#lusername").hide();
+    window.location = "/";
+}
+
+$("#lout").click(logout);
