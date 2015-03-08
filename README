@@ -1,0 +1,8 @@
+Roommark
+========
+
+Currently uses sqlite for backend.  run `pip install -r
+requirements.txt` to install all dependencies. Create databases by
+running `python db_create.py` before first run. You can start the
+server by running `python run.py`
+
